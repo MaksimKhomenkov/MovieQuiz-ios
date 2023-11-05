@@ -17,6 +17,9 @@ private struct QuizQuestion {
 }
 
 final class MovieQuizViewController: UIViewController {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask { .portrait }
     
     @IBOutlet private weak var yesButton: UIButton!
