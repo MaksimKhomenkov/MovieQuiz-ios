@@ -22,6 +22,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private let questionsAmount: Int = 10
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
+    private var alertPresenter: AlertPresenter?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -29,6 +30,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         questionFactory = QuestionFactory()
         questionFactory?.delegate = self
         questionFactory?.requestNextQuestion()
+        alertPresenter = AlertPresenter(viewController: self)
     }
     // MARK: - QuestionFactoryDelegate
     func didRecieveNextQuestion(question: QuizQuestion?) {
@@ -41,6 +43,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             self?.show(quiz: viewModel)
         }
     }
+    // MARK: - Private func
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
         let questionStep = QuizStepViewModel(
             image: UIImage(named: model.image) ?? UIImage(),
@@ -76,37 +79,31 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     private func showNextQuestionOrResult(){
         if currentQuestionIndex == questionsAmount - 1 {
-            let text = correctAnswers == questionsAmount ?
-            "Поздравляем, вы ответили на 10 из 10" :
-            "Вы ответили на \(correctAnswers) из 10, попробуйте еще раз!"
-            let viewModel = QuizResultViewModel(
-                title: "Этот раунд окончен!",
-                text: text,
-                buttonText: "Сыграть еще раз")
-            show(quiz: viewModel)
+            show()
         } else {
             currentQuestionIndex += 1
             
             self.questionFactory?.requestNextQuestion()
         }
     }
-    private func show(quiz result: QuizResultViewModel){
-        let alert = UIAlertController(
-            title: result.title,
-            message: result.text,
-            preferredStyle: .alert)
-        
-        let action = UIAlertAction(title: result.buttonText, style: .default) { [weak self] _ in
-            guard let self = self else { return }
-            
-            self.currentQuestionIndex = 0
-            self.correctAnswers = 0
-            
-            questionFactory?.requestNextQuestion()
-        alert.addAction(action)
-        self.present(alert, animated: true, completion: nil)
-        }
+    private func show(){
+        let alertModel = AlertModel(
+            title: "Этот раунд окончен!",
+            message: """
+                Ваш результат: \(correctAnswers)/\(questionsAmount)
+                Колличество сыграных квизов:
+                Рекорд:
+                Средняя точность:
+                """,
+            buttonText: "Сыграть еще раз",
+            buttonAction: { [weak self] in
+                self?.currentQuestionIndex = 0
+                self?.correctAnswers = 0
+                self?.questionFactory?.requestNextQuestion()
+            })
+        alertPresenter?.show(alertModel: alertModel)
     }
+    
     @IBAction private func yesButtonTap(_ sender: Any) {
         guard let currentQuestion = currentQuestion else {
             return
