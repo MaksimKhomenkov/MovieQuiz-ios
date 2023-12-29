@@ -53,6 +53,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     private func show(quiz step: QuizStepViewModel) {
+        imageView.isHidden = false
         imageView.image = step.image
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
@@ -75,6 +76,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             self.imageView.layer.borderColor = UIColor.clear.cgColor
             self.yesButton.isEnabled = true
             self.noButton.isEnabled = true
+            self.imageView.isHidden = true
         }
     }
     
@@ -110,7 +112,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             buttonAction: { [weak self] in
                 self?.currentQuestionIndex = 0
                 self?.correctAnswers = 0
-                self?.questionFactory?.requestNextQuestion()
+                self?.questionFactory?.loadData()
             })
         alertPresenter?.show(alertModel: alertModel)
     }

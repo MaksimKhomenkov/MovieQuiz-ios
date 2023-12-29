@@ -1,10 +1,10 @@
 import UIKit
 
-protocol MoviesLoading {
+protocol MoviesLoadingProtocol {
     func loadMovies(handler: @escaping (Result<MostPopularMovies, Error>) -> Void)
 }
 
-struct MoviesLoader: MoviesLoading {
+struct MoviesLoader: MoviesLoadingProtocol {
     // MARK: - NetworkClient
     private let networkClient = NetworkClient()
     
