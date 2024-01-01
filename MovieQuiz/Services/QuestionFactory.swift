@@ -1,38 +1,7 @@
 import Foundation
 
 class QuestionFactory: QuestionFactoryProtocol {
-    //    private  let questions: [QuizQuestion] = [
-    //        QuizQuestion(image: "The Godfather",
-    //                     text: "Рейтинг этого фильма больше чем 6?",
-    //                     correctAnswer: true),
-    //        QuizQuestion(image: "The Dark Knight",
-    //                     text: "Рейтинг этого фильма больше чем 6?",
-    //                     correctAnswer: true),
-    //        QuizQuestion(image: "Kill Bill",
-    //                     text: "Рейтинг  этого фильма больше чем 6?",
-    //                     correctAnswer: true),
-    //        QuizQuestion(image: "The Avengers",
-    //                     text: "Рейтинг этого фильма больше чем 6?",
-    //                     correctAnswer: true),
-    //        QuizQuestion(image: "Deadpool",
-    //                     text: "Рейтинг этого фильма больше чем 6?",
-    //                     correctAnswer: true),
-    //        QuizQuestion(image: "The Green Knight",
-    //                     text: "Рейтинг этого фильма больше чем 6?",
-    //                     correctAnswer: true),
-    //        QuizQuestion(image: "Old",
-    //                     text: "Рейтинг этого фильма больше чем 6?",
-    //                     correctAnswer: false),
-    //        QuizQuestion(image: "The Ice Age Adventures of Buck Wild",
-    //                     text: "Рейтинг этого фильма больше чем 6?",
-    //                     correctAnswer: false),
-    //        QuizQuestion(image: "Tesla",
-    //                     text: "Рейтинг этого фильма больше чем 6?",
-    //                     correctAnswer: false),
-    //        QuizQuestion(image: "Vivarium",
-    //                     text: "Рейтинг этого фильма больше чем 6?",
-    //                     correctAnswer: false)
-    //    ]
+    
     private  let moviesLoader: MoviesLoadingProtocol
     weak var delegate: QuestionFactoryDelegate?
     private var movies: [MostPopularMovie] = []
@@ -73,9 +42,27 @@ class QuestionFactory: QuestionFactoryProtocol {
             }
             
             let rating = Float(movie.rating) ?? 0
+            let randomNumber = Int(arc4random_uniform(5)) + 1
+            let text: String
+            let correctAnswer: Bool
             
-            let text = "Рейтинг этого фильма больше чем 7?"
-            let correctAnswer = rating > 7
+            switch randomNumber {
+            case 1:
+                text = "Рейтинг этого фильма меньше чем 8?"
+                correctAnswer = rating < 8
+            case 2:
+                text = "Рейтинг этого фильма больше чем 8?"
+                correctAnswer = rating > 8
+            case 3:
+                text = "Рейтинг этого фильма меньше чем 6?"
+                correctAnswer = rating < 6
+            case 4:
+                text = "Рейтинг этого фильма больше чем 4?"
+                correctAnswer = rating > 4
+            default:
+                text = "Рейтинг этого фильма больше чем 7?"
+                correctAnswer = rating > 7
+            }
             
             let question = QuizQuestion(image: imageData,
                                         text: text,
