@@ -30,6 +30,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         statisticServise = StatisticService()
         showLoadingIndicator()
         questionFactory?.loadData()
+        presenter.viewController = self
     }
     // MARK: - QuestionFactoryDelegate
     
@@ -55,7 +56,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         questionTitleLabel.isHidden = false
     }
     
-    private func showAnswerResult(isCorrect: Bool) {
+    func showAnswerResult(isCorrect: Bool) {
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
@@ -148,17 +149,11 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     // MARK: - IBActions
     @IBAction private func yesButtonTap(_ sender: Any) {
-        guard let currentQuestion = currentQuestion else {
-            return
-        }
-        let givenAnswer = true
-        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        presenter.currentQuestion = currentQuestion
+        presenter.yesButtonTap()
     }
     @IBAction private func noButtonTap(_ sender: Any) {
-        guard let currentQuestion = currentQuestion else {
-            return
-        }
-        let givenAnswer = false
-        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        presenter.currentQuestion = currentQuestion
+        presenter.noButtonTap()
     }
 }
