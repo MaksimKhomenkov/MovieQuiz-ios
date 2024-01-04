@@ -11,6 +11,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var textLabel: UILabel!
     @IBOutlet private weak var counterLabel: UILabel!
+    @IBOutlet weak var questionTitleLabel: UILabel!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     private var currentQuestionIndex: Int = 0
@@ -53,10 +54,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     
     private func show(quiz step: QuizStepViewModel) {
-        imageView.isHidden = false
         imageView.image = step.image
+        imageView.isHidden = false
         textLabel.text = step.question
+        textLabel.isHidden = false
         counterLabel.text = step.questionNumber
+        counterLabel.isHidden = false
+        questionTitleLabel.isHidden = false
     }
     
     private func showAnswerResult(isCorrect: Bool) {
@@ -77,6 +81,9 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             self.yesButton.isEnabled = true
             self.noButton.isEnabled = true
             self.imageView.isHidden = true
+            self.textLabel.isHidden = true
+            self.counterLabel.isHidden = true
+            self.questionTitleLabel.isHidden = true
         }
     }
     
